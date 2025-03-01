@@ -62,7 +62,7 @@ Install the prepackaged DEB files:
 
 1. Download the package archives from the `prebuilt/debs` directory
 2. Extract them to your download folder
-4. Install using dpkg:
+3. Install using dpkg:
 
 ```bash
 dpkg --force-all -i /storage/emulated/0/Download/debs/*.deb
@@ -191,6 +191,21 @@ Configure your shell environment (assuming ZSH):
 3. Test the server script:
    ```bash
    ~/server.sh start
+   ```
+
+### Step 11: Configure Nginx, PHP-FPM, and SSHD
+
+1. Download `config-files.zip` from the `setup` directory to your device.
+
+2. Extract the archive to your internal storage (preferably to `/storage/emulated/0/Download/`).
+
+3. Copy the configuration files to their respective directories:
+   ```bash
+   cp /storage/emulated/0/Download/nginx/nginx.conf /data/data/com.termux/files/usr/etc/nginx/nginx.conf
+   cp /storage/emulated/0/Download/nginx/sites-available/default /data/data/com.termux/files/usr/etc/nginx/sites-available/default
+   cp /storage/emulated/0/Download/php/php.ini /data/data/com.termux/files/usr/etc/php.ini
+   cp /storage/emulated/0/Download/php/php-fpm.conf /data/data/com.termux/files/usr/etc/php-fpm.conf
+   cp /storage/emulated/0/Download/ssh/sshd_config /data/data/com.termux/files/usr/etc/ssh/sshd_config
    ```
 
 ## Troubleshooting
