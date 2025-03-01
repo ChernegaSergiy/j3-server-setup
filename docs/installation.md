@@ -24,7 +24,7 @@ Before starting the installation, ensure you have:
 3. In TermOnePlus, run:
 
 ```bash
-cp -r /storage/emulated/0/Download/data/data/com.termux/files/usr/ /data/data/com.termux/files/.
+cp -r /storage/emulated/0/Download/data/data/com.termux/files /data/data/com.termux/
 ```
 
 ## Step 3: Configure the Environment
@@ -42,18 +42,19 @@ export PREFIX=/data/data/com.termux/files/usr
 Create the necessary directory structure:
 
 ```bash
-mkdir -p /data/data/com.termux/files/usr/var/lib/dpkg
-mkdir -p /data/data/com.termux/files/usr/var/log/apt
-mkdir -p /data/data/com.termux/files/usr/var/cache/apt/archives
-mkdir -p /data/data/com.termux/files/usr/etc/apt/sources.list.d
-mkdir -p /data/data/com.termux/files/usr/etc/apt/apt.conf.d
-mkdir -p /data/data/com.termux/files/usr/etc/apt/preferences.d
-mkdir -p /data/data/com.termux/files/usr/tmp
-
-touch /data/data/com.termux/files/usr/var/lib/dpkg/status
-touch /data/data/com.termux/files/usr/var/lib/dpkg/available
-touch /data/data/com.termux/files/usr/var/lib/dpkg/diversion
-touch /data/data/com.termux/files/usr/var/lib/dpkg/updates
+mkdir -p \
+  /data/data/com.termux/files/usr/var/lib/dpkg \
+  /data/data/com.termux/files/usr/var/log/apt \
+  /data/data/com.termux/files/usr/var/cache/apt/archives \
+  /data/data/com.termux/files/usr/etc/apt/sources.list.d \
+  /data/data/com.termux/files/usr/etc/apt/apt.conf.d \
+  /data/data/com.termux/files/usr/etc/apt/preferences.d \
+  /data/data/com.termux/files/usr/tmp && \
+touch \
+  /data/data/com.termux/files/usr/var/lib/dpkg/status \
+  /data/data/com.termux/files/usr/var/lib/dpkg/available \
+  /data/data/com.termux/files/usr/var/lib/dpkg/diversion \
+  /data/data/com.termux/files/usr/var/lib/dpkg/updates
 ```
 
 ## Step 5: Install Required Packages
