@@ -61,7 +61,7 @@ The script:
 
 ## battery.php
 
-The `battery.php` script monitors the device's battery level and can trigger actions based on battery status.
+The `battery.php` script monitors the device's battery level and sends notifications based on battery status.
 
 ### Basic Usage
 
@@ -74,32 +74,31 @@ php battery.php
 ### Features
 
 - Monitors battery level in real-time
-- Logs battery status to a file
-- Can trigger emergency shutdowns on critically low battery
-- Sends notifications when the battery level reaches certain thresholds
+- Sends notifications to a Telegram chat when the battery status changes
 
 ### Configuration
 
 You can customize the script's behavior by editing the following values at the top of the file:
 
 ```php
-// Battery thresholds
-$CRITICAL_LEVEL = 10;  // Critical battery level percentage
-$WARNING_LEVEL = 20;   // Warning battery level percentage
-$LOG_INTERVAL = 300;   // Logging interval in seconds (5 minutes)
+const TELEGRAM_API_TOKEN = 'Ваш_Telegram_API_Token';
+const CHAT_ID = 'Ваш_Chat_ID';
 ```
 
-### Log File
+### Telegram Integration
 
-By default, the script logs battery information to:
+The script sends messages to a specified Telegram chat using the Telegram Bot API. The message includes the current battery status, level, temperature, and health.
 
-```
-~/battery-log.txt
-```
+### Example Notification Message
 
-The log format is:
-```
-[YYYY-MM-DD HH:MM:SS] Battery: XX%, Status: CHARGING/DISCHARGING, Temperature: YY°C
+```text
+🔋 Статус батареї:
+• Рівень заряду: XX%
+• Стан зарядки: Підключено до зарядного пристрою/Не підключено
+• Статус: Заряджається/Розряджається/Заряд повний/Не заряджається
+• Температура: YY°C
+• Здоров'я: Хороший стан/Перегрів/Вмерла батарея/Не визначено
+• Струм: ZZ µA
 ```
 
 ## Customizing the Scripts
@@ -118,8 +117,17 @@ To add a new service to manage:
 
 To add custom actions based on battery level:
 
-1. Find the appropriate condition check (critical, warning, etc.)
-2. Add your custom code within the conditional block
+1. Find the `getBatteryStatus` function which retrieves the current battery status.
+2. Add your custom code within the `if` conditions in the `while` loop that handles updates and notifications.
+
+For example, to add a custom action when battery percentage drops below a certain level:
+
+```php
+if ($battery['percentage'] < 15) {
+    // Your custom action here
+    sendToTelegram("⚠️ Battery level is critically low: {$battery['percentage']}%");
+}
+```
 
 ## Best Practices
 
