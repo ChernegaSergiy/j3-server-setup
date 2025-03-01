@@ -10,18 +10,18 @@ Before starting the installation, ensure you have:
 - At least 1GB of free storage space
 - Enabled "Install from Unknown Sources" in your Android settings
 
-## Step 1: Install the Modified Termux APK
+## Step 1: Install the Modified TermOnePlus APK
 
 1. Browse to the `apk` directory in this repository
-2. Download and install `termux-custom.apk`
-3. Install the font package `termux-font-dejavu-nerd.apk`
-4. Open the newly installed Termux application
+2. Download and install `termoneplus-custom.apk`
+3. Install the font package `termoneplus-font-dejavu-nerd.apk`
+4. Open the newly installed TermOnePlus application
 
 ## Step 2: Extract the Bootstrap Files
 
 1. Download `termux-bootstrap.zip` from the `setup` directory to your device
 2. Extract the archive to your internal storage (preferably to `/storage/emulated/0/Download/`)
-3. In Termux, run:
+3. In TermOnePlus, run:
 
 ```bash
 cp -r /storage/emulated/0/Download/data/data/com.termux/files/usr/ /data/data/com.termux/files/.
