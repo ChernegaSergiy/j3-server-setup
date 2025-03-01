@@ -118,6 +118,21 @@ Configure your shell environment (assuming ZSH):
    echo "source ${(q-)PWD}/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
    ```
 
+4. Install PowerLevel10k:
+   ```bash
+   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+   ```
+
+5. Update your `~/.zshrc` file to use PowerLevel10k:
+   ```bash
+   sed -i 's|ZSH_THEME="robbyrussell"|ZSH_THEME="powerlevel10k/powerlevel10k"|' ~/.zshrc
+   ```
+
+6. Apply the changes:
+   ```bash
+   source ~/.zshrc
+   ```
+
 ## Step 8: Install Server Management Scripts
 
 1. Copy the server management script:
