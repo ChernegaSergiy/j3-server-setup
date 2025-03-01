@@ -59,6 +59,49 @@ The script:
 - `0`: Operation completed successfully
 - `1`: Invalid command or missing dependency
 
+## battery.php
+
+The `battery.php` script monitors the device's battery level and can trigger actions based on battery status.
+
+### Basic Usage
+
+Usually, this script is started automatically by `server.sh`, but you can also run it directly:
+
+```bash
+php battery.php
+```
+
+### Features
+
+- Monitors battery level in real-time
+- Logs battery status to a file
+- Can trigger emergency shutdowns on critically low battery
+- Sends notifications when the battery level reaches certain thresholds
+
+### Configuration
+
+You can customize the script's behavior by editing the following values at the top of the file:
+
+```php
+// Battery thresholds
+$CRITICAL_LEVEL = 10;  // Critical battery level percentage
+$WARNING_LEVEL = 20;   // Warning battery level percentage
+$LOG_INTERVAL = 300;   // Logging interval in seconds (5 minutes)
+```
+
+### Log File
+
+By default, the script logs battery information to:
+
+```
+~/battery-log.txt
+```
+
+The log format is:
+```
+[YYYY-MM-DD HH:MM:SS] Battery: XX%, Status: CHARGING/DISCHARGING, Temperature: YY°C
+```
+
 ## Customizing the Scripts
 
 You can modify both scripts to fit your specific needs:
