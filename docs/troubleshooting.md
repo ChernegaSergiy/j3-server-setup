@@ -31,7 +31,7 @@ This guide addresses common issues you might encounter when setting up and using
    ```bash
    chmod +x /path/to/file
    ```
-3. For system directories, ensure Termux has proper permissions in Android settings
+3. For system directories, ensure TermOnePlus has proper permissions in Android settings
 
 ## Environment Setup Issues
 
