@@ -1,100 +1,81 @@
-# Samsung Galaxy J3 Server Setup
+# j3-server-setup
 
-This repository contains installation instructions and necessary files to set up a fully functional server environment on Android devices with limited system resources, specifically targeting devices that only support termux-21 or running Android 5-6.
+A specialized setup for running server applications on Android devices using a modified Termux environment. This repository is particularly useful for older Android devices (Android 5-6) that only support termux-21.
 
-## Features
+## Overview
 
-- Preconfigured Termux environment with essential system files
-- Modified APK with custom package name (com.termux)
+This repository provides a complete setup for establishing a functional server environment on Android devices using a modified Termux distribution. It includes:
+
+- Custom Termux APK with the package name `com.termux`
 - Enhanced terminal font (DejaVuSansMNerdFontMono-Regular)
-- Automated server management scripts
-- Pre-built dpkg packages for offline installation
+- Pre-configured binary packages
+- Scripts for server management and automation
+- Step-by-step installation instructions
 
 ## Requirements
 
-- Android device (works best on Android 5-6)
-- Minimum 100MB of free storage
-- File access permissions
-- Installation of custom APKs enabled in settings
+- Android device running Android 5 or 6
+- At least 1GB of free storage space
+- Internet connection for initial setup
+
+## Repository Structure
+
+```
+j3-server-setup/
+├── apk/
+│   ├── termux-custom.apk
+│   └── termux-font-dejavu-nerd.apk
+├── prebuilt/
+│   ├── bin/
+│   │   ├── ngrok
+│   │   └── cloudflared
+│   └── debs/
+│       ├── essential-packages.zip
+│       └── additional-packages.zip
+├── scripts/
+│   ├── server.sh
+│   └── battery.php
+├── setup/
+│   ├── termux-bootstrap.zip
+│   └── config-files.zip
+└── docs/
+    ├── installation.md
+    ├── troubleshooting.md
+    └── scripts-usage.md
+```
 
 ## Quick Start
 
-1. Download and install the [modified Termux APK](https://github.com/yourusername/j3-server-setup/releases/download/v1.0/termux-modified.apk)
+1. Download and install the custom Termux APK from the `apk` directory
+2. Install the Nerd Font APK for enhanced terminal display
+3. Follow the detailed installation guide in [docs/installation.md](docs/installation.md)
 
-2. Extract the environment files to your device
+## Detailed Installation
 
-3. Run the setup script:
-   ```bash
-   sh setup.sh
-   ```
+See the [Installation Guide](docs/installation.md) for complete step-by-step instructions.
 
-4. Start the server:
-   ```bash
-   server.sh start
-   ```
+## Scripts
 
-## Detailed Instructions
+### server.sh
 
-See the [Installation Guide](docs/INSTALLATION.md) for step-by-step instructions.
+A utility script to manage server services (nginx, php-fpm, cloudflared, sshd):
 
-## Available Scripts
+```
+Usage: server.sh {start|stop} [--force]
+```
 
-- `server.sh` - Manages server processes (start/stop)
-- `battery.php` - Monitors battery level and performs actions based on status
+### battery.php
 
-## Packages Included
-
-### Utilities
-- BusyBox 1.31.1
-- Sed 4.7
-- Grep 3.3
-- Findutils 4.7.0
-- Diffutils 3.7
-- Coreutils 8.31
-- Tar 1.32
-- Bzip2 1.0.8
-- Zlib 1.2.11
-- Gzip 1.10
-
-### Networking
-- libcurl 7.67.0
-- libnghttp2 1.39.2
-- libiconv 1.16
-- libandroid-support 24-6
-
-### Security
-- OpenSSL 1.1.1d
-- libgpg-error 1.36
-- libgcrypt 1.8.5
-- Gpgv 2.2.17
-- CA Certificates 1.0
-
-### Package Management
-- Apt 1.4.10
-- Dpkg 1.19.7
-
-### Development Tools
-- Composer 2.8.2
-- libc++ 20-3
-- Nano 4.6
-- Less 551
-
-### System Tools
-- Termux Licenses 1.1
-- libbz2 1.0.8
-- libandroid-glob 0.6
-- Ncurses 6.1
-- XZ-utils 5.2.4
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+A PHP script for monitoring battery status and performing related operations.
 
 ## License
 
 This project is licensed under the CSSM Unlimited License v2 (CSSM-ULv2). See the [LICENSE](LICENSE) file for details.
 
-## Acknowledgements
+## Disclaimer
 
-- Based on the original TermOnePlus application
-- Special thanks to all contributors to the Termux project
+This repository contains modified versions of open-source software. The modifications are made to enhance compatibility with older Android devices. All original licenses and attributions are preserved.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
