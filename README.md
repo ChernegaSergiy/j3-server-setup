@@ -1,6 +1,6 @@
 # j3-server-setup
 
-A specialized setup for running server applications on Android devices using a modified Termux environment. This repository is particularly useful for older Android devices (Android 5-6) that only support termux-21.
+A specialized setup for running server applications on Android devices using a modified TermOnePlus environment. This repository is particularly useful for older Android devices (Android 5-6) that only support termux-21.
 
 ## Overview
 
@@ -46,7 +46,7 @@ j3-server-setup/
 
 ## Quick Start
 
-1. Download and install the custom Termux APK from the `apk` directory
+1. Download and install the custom TermOnePlus APK from the `apk` directory
 2. Install the Nerd Font APK for enhanced terminal display
 3. Follow the detailed installation guide in [docs/installation.md](docs/installation.md)
 
