@@ -4,9 +4,9 @@ A specialized setup for running server applications on Android devices using a m
 
 ## Overview
 
-This repository provides a complete setup for establishing a functional server environment on Android devices using a modified Termux distribution. It includes:
+This repository provides a complete setup for establishing a functional server environment on Android devices using a modified TermOnePlus distribution. It includes:
 
-- Custom Termux APK with the package name `com.termux`
+- Custom TermOnePlus APK with the package name `com.termux`
 - Enhanced terminal font (DejaVuSansMNerdFontMono-Regular)
 - Pre-configured binary packages
 - Scripts for server management and automation
@@ -23,8 +23,8 @@ This repository provides a complete setup for establishing a functional server e
 ```
 j3-server-setup/
 ├── apk/
-│   ├── termux-custom.apk
-│   └── termux-font-dejavu-nerd.apk
+│   ├── termoneplus-custom.apk
+│   └── termoneplus-font-dejavu-nerd.apk
 ├── prebuilt/
 │   ├── bin/
 │   │   ├── ngrok
