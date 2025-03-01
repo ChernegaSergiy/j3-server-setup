@@ -14,10 +14,9 @@ Ngrok is not available for armv7l architecture via the standard repositories. Yo
 
 1. Download the `ngrok` tarball for `armv6` from the official website: [Ngrok Downloads](https://ngrok.com/download).
 2. Once downloaded, extract the files:
-
-```bash
-tar -xvzf /storage/emulated/0/Download/ngrok-v3-stable-linux-arm.tgz -C /data/data/com.termux/files/usr/bin
-```
+   ```bash
+   tar -xvzf /storage/emulated/0/Download/ngrok-v3-stable-linux-arm.tgz -C /data/data/com.termux/files/usr/bin
+   ```
 
 #### Option 2: Use the precompiled binary
 
