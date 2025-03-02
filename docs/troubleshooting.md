@@ -216,4 +216,3 @@ If you're still experiencing issues after trying these troubleshooting steps:
    - Exact error messages
    - Steps to reproduce the issue
 3. Consider joining relevant communities like the Termux subreddit or forums for additional support
-4. 
