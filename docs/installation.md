@@ -174,29 +174,52 @@ If you want to enhance your Zsh experience, follow these optional steps:
 
 ### Web Server Setup
 
-1. Configure Nginx:
+1. Create the Default Web Directory
+
+   Ensure the directory for the web server exists:
+
    ```bash
-   mkdir -p ~/www
+   mkdir -p /data/data/com.termux/files/usr/share/nginx/html
+   ```
+
+3. Create a Sample Index File
+
+   Create a test `index.html` file in the directory:
+
+   ```bash
    echo "Hello World" > /data/data/com.termux/files/usr/share/nginx/html/index.html
    ```
 
-2. Start the server:
+5. Start the server using the provided script:
+
    ```bash
    ~/server.sh start
    ```
 
 ### SSH Access Setup
 
-1. Generate SSH keys:
+1. Generate SSH keys for secure access:
+
    ```bash
    ssh-keygen -t ed25519
    ```
 
-2. Configure password-less login (optional):
+   Press `Enter` to accept the default values.
+
+2. Configure password-less login (optional)
+
+   If you want to enable password-less login, add your public key to `authorized_keys`:
+
    ```bash
    mkdir -p ~/.ssh
    touch ~/.ssh/authorized_keys
-   # Add your public key to authorized_keys
+   cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
+   ```
+
+3. Start the SSH server:
+
+   ```bash
+   sshd
    ```
 
 ## Step 10: Testing Your Setup
