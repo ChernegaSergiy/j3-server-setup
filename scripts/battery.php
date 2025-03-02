@@ -332,8 +332,6 @@ function runBatteryMonitor()
                     if (sendToTelegram(formatBatteryMessage($battery))) {
                         logMessage("Scheduled battery status for hour {$currentHour} sent successfully");
                         handleCriticalCharge($battery);
-
-                        return true;
                     } else {
                         logMessage("Failed to send scheduled battery status for hour {$currentHour}", true);
                     }
