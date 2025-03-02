@@ -11,9 +11,11 @@
 const TELEGRAM_API_TOKEN = 'YOUR_TELEGRAM_API_TOKEN';
 const CHAT_ID = 'YOUR_CHAT_ID';
 const LOG_FILE = __DIR__ . '/path/to/logfile.log';
+const TELEGRAM_SEND_MINUTE = 0;
+const HOURLY_CHECK_INTERVAL = 60;
 const MAX_RETRY_ATTEMPTS = 3;
 const RETRY_DELAY = 5;
-const HOURLY_CHECK_INTERVAL = 60;
+const ERROR_SLEEP_TIME = 30;
 const CRITICAL_BATTERY_THRESHOLD = 15;
 
 set_error_handler(function ($severity, $message, $file, $line) {
@@ -159,7 +161,10 @@ function formatBatteryMessage($battery)
 
 function handleCriticalCharge($battery)
 {
-    if (is_numeric($battery['percentage']) && (int) $battery['percentage'] < CRITICAL_BATTERY_THRESHOLD) {
+    $startTime = microtime(true);
+    $maxExecutionTime = 5;
+
+    if (is_numeric($battery['percentage']) && (int) $battery['percentage'] <= CRITICAL_BATTERY_THRESHOLD) {
         $message = "⚠️ <b>Critical Battery Warning</b> ⚠️\n" .
                    "Battery level is critically low at {$battery['percentage']}%.\n" .
                    'Please connect the charger immediately!';
@@ -171,6 +176,10 @@ function handleCriticalCharge($battery)
         ]);
 
         logMessage("Critical battery level reached: {$battery['percentage']}%");
+    }
+
+    if ((microtime(true) - $startTime) > $maxExecutionTime) {
+        logMessage('Warning: handleCriticalCharge took longer than expected', true);
     }
 }
 
@@ -272,7 +281,7 @@ function runBatteryMonitor()
 {
     logMessage('Battery monitoring script started');
 
-    $lastHourlyUpdate = 0;
+    $lastHourlyUpdate = -1;
     $lastUpdateId = 0;
 
     $battery = getBatteryStatus();
@@ -295,14 +304,19 @@ function runBatteryMonitor()
 
                     if (! empty($update['callback_query']) && 'refresh_battery' === $update['callback_query']['data']) {
                         $battery = getBatteryStatus();
+                        $callbackId = $update['callback_query']['id'];
+
                         if (null !== $battery) {
                             if (sendToTelegram(formatBatteryMessage($battery))) {
-                                answerCallbackQuery($update['callback_query']['id'], 'Data refreshed!');
+                                answerCallbackQuery($callbackId, 'Data refreshed!');
                                 logMessage('Battery status refreshed and sent to Telegram');
+                                handleCriticalCharge($battery);
+                            } else {
+                                answerCallbackQuery($callbackId, 'Error sending data!');
+                                logMessage('Failed to send battery status for refresh', true);
                             }
-                            handleCriticalCharge($battery);
                         } else {
-                            answerCallbackQuery($update['callback_query']['id'], 'Error retrieving data!');
+                            answerCallbackQuery($callbackId, 'Error retrieving data!');
                             logMessage('Failed to retrieve battery status for refresh', true);
                         }
                     }
@@ -312,25 +326,30 @@ function runBatteryMonitor()
             $currentHour = intval(date('H'));
             $currentMinute = intval(date('i'));
 
-            if ((0 === $currentMinute || 1 === $currentMinute) && $lastHourlyUpdate !== $currentHour) {
+            if (TELEGRAM_SEND_MINUTE === $currentMinute && $lastHourlyUpdate !== $currentHour) {
                 $battery = getBatteryStatus();
                 if (null !== $battery) {
                     if (sendToTelegram(formatBatteryMessage($battery))) {
-                        logMessage('Hourly battery status sent to Telegram');
+                        logMessage("Scheduled battery status for hour {$currentHour} sent successfully");
+                        handleCriticalCharge($battery);
+
+                        return true;
+                    } else {
+                        logMessage("Failed to send scheduled battery status for hour {$currentHour}", true);
                     }
-                    handleCriticalCharge($battery);
                 } else {
                     logMessage('Failed to retrieve battery status for hourly update', true);
                 }
 
                 $lastHourlyUpdate = $currentHour;
-                sleep(HOURLY_CHECK_INTERVAL);
+
+                sleep(min(HOURLY_CHECK_INTERVAL, 55));
             }
 
-            sleep(1);
+            usleep(200000);
         } catch (Exception $e) {
             logMessage('Error in main loop: ' . $e->getMessage(), true);
-            sleep(30);
+            sleep(ERROR_SLEEP_TIME);
         }
     }
 }
