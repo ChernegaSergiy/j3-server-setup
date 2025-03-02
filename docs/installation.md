@@ -87,49 +87,71 @@ cp /storage/emulated/0/Download/prebuilt/bin/cloudflared /data/data/com.termux/f
 chmod +x /data/data/com.termux/files/usr/bin/cloudflared
 ```
 
-## Step 7: Set Up Shell Configuration
+## Step 7: Configure the Shell Environment
 
-Configure your shell environment (assuming ZSH):
+### 1. Set Up `~/.shrc`
 
-1. Create or edit `~/.zshrc`:
-   ```bash
-   # Add to ~/.zshrc
-   export PATH=/data/data/com.termux/files/usr/bin:$PATH
-   export LD_LIBRARY_PATH=/data/data/com.termux/files/usr/lib:$LD_LIBRARY_PATH
-   export PREFIX=/data/data/com.termux/files/usr
+Open or create the `~/.shrc` file and add the following lines to configure the environment:
 
-   export LANG=en_US.UTF-8
-   export LC_ALL=en_US.UTF-8
+```bash
+# Add to ~/.shrc
+export PATH=/data/data/com.termux/files/usr/bin:$PATH
+export LD_LIBRARY_PATH=/data/data/com.termux/files/usr/lib:$LD_LIBRARY_PATH
+export PREFIX=/data/data/com.termux/files/usr
 
-   export SHELL=/data/data/com.termux/files/usr/bin/zsh
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
-   # Add useful aliases
-   alias ngrok="termux-chroot ngrok"
-   alias cloudflared="termux-chroot cloudflared"
-   ```
+export SHELL=/data/data/com.termux/files/usr/bin/zsh
 
-2. Install Oh My Zsh (optional):
+# Start Zsh automatically
+exec zsh
+```
+
+### 2. Set Up `~/.zshrc`
+
+Open or create the `~/.zshrc` file and add the following aliases for convenience:
+
+```bash
+# Add to ~/.zshrc
+alias ngrok="termux-chroot ngrok"
+alias cloudflared="termux-chroot cloudflared"
+```
+
+### 3. Apply the Changes
+
+To apply the new settings, run the following command in TermOnePlus:
+
+```bash
+source ~/.shrc
+```
+
+### 4. Optional: Enhance Zsh
+
+If you want to enhance your Zsh experience, follow these optional steps:
+
+1. Install Oh My Zsh:
    ```bash
    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
    ```
 
-3. Install ZSH syntax highlighting:
+2. Install Zsh Syntax Highlighting:
    ```bash
    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
    echo "source ${(q-)PWD}/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
    ```
 
-4. Install PowerLevel10k:
+3. Install PowerLevel10k Theme:
    ```bash
    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
    ```
 
-5. Update your `~/.zshrc` file to use PowerLevel10k:
+4. Update `~/.zshrc` to Use PowerLevel10k:
    ```bash
    sed -i 's|ZSH_THEME="robbyrussell"|ZSH_THEME="powerlevel10k/powerlevel10k"|' ~/.zshrc
    ```
 
-6. Apply the changes:
+5. Apply the Changes:
    ```bash
    source ~/.zshrc
    ```
@@ -194,11 +216,11 @@ Configure your shell environment (assuming ZSH):
    ~/server.sh start
    ```
 
-### Step 11: Configure Nginx, PHP-FPM, and SSHD
+## Step 11: Configure Nginx, PHP-FPM, and SSHD
 
-1. Download `config-files.zip` from the `setup` directory to your device.
+1. Download `config-files.zip` from the `setup` directory to your device
 
-2. Extract the archive to your internal storage (preferably to `/storage/emulated/0/Download/`).
+2. Extract the archive to your internal storage (preferably to `/storage/emulated/0/Download/`)
 
 3. Copy the configuration files to their respective directories:
    ```bash
