@@ -28,22 +28,33 @@ The script manages the following services:
 - **sshd**: SSH server for remote access
 - **battery.php**: Battery monitoring script
 
+Ось як можна покращити розділ "Examples" у документації:
+
 ### Examples
 
-Start all server processes:
+**Starting all server processes:**
 ```bash
 ./server.sh start
 ```
+This command will start all the managed server processes including `nginx`, `php-fpm`, `cloudflared`, `sshd`, and the `battery.php` monitoring script.
 
-Stop all server processes (gracefully):
+**Stopping all server processes gracefully:**
 ```bash
 ./server.sh stop
 ```
+This command will stop all the managed server processes gracefully, ensuring they have time to shut down properly.
 
-Force stop all processes (including SSH sessions):
+**Force stopping all processes (including SSH sessions):**
 ```bash
 ./server.sh stop --force
 ```
+This command will forcefully stop all the managed server processes, including any active SSH sessions, which can be useful if the processes do not respond to the normal termination signal.
+
+**Checking the status of server processes:**
+```bash
+ps aux | grep -E 'nginx|php-fpm|cloudflared|sshd|battery.php'
+```
+This command will list the current status of the server processes managed by the script, allowing you to verify which processes are running.
 
 ### How It Works
 
@@ -92,13 +103,13 @@ The script sends messages to a specified Telegram chat using the Telegram Bot AP
 ### Example Notification Message
 
 ```text
-🔋 Статус батареї:
-• Рівень заряду: XX%
-• Стан зарядки: Підключено до зарядного пристрою/Не підключено
-• Статус: Заряджається/Розряджається/Заряд повний/Не заряджається
-• Температура: YY°C
-• Здоров'я: Хороший стан/Перегрів/Вмерла батарея/Не визначено
-• Струм: ZZ µA
+🔋 Battery Status:
+• Charge Level: XX%
+• Charging State: Connected to charger/Not connected
+• Status: Charging/Discharging/Full/Not charging
+• Temperature: YY°C
+• Health: Good condition/Overheating/Battery dead/Unspecified
+• Current: ZZ µA
 ```
 
 ## Customizing the Scripts
@@ -115,17 +126,55 @@ To add a new service to manage:
 
 ### Modifying battery.php
 
-To add custom actions based on battery level:
+To add custom actions based on battery temperature:
 
 1. Find the `getBatteryStatus` function which retrieves the current battery status.
-2. Add your custom code within the `if` conditions in the `while` loop that handles updates and notifications.
-
-For example, to add a custom action when battery percentage drops below a certain level:
+2. Add the following custom function to handle high battery temperature:
 
 ```php
-if ($battery['percentage'] < 15) {
-    // Your custom action here
-    sendToTelegram("⚠️ Battery level is critically low: {$battery['percentage']}%");
+/**
+ * Monitor battery temperature and send alert if it exceeds a threshold.
+ *
+ * @param array $battery Battery information
+ * @return bool Success status
+ */
+function handleHighTemperature(array $battery) : bool
+{
+    $temperatureThreshold = 45.0; // Temperature threshold in Celsius
+    if ($battery['temperature'] > $temperatureThreshold) {
+        $message = "🔥 <b>High Temperature Alert</b> 🔥\n" .
+                   "Battery temperature is at {$battery['temperature']}°C.\n" .
+                   "This is above the safe threshold of {$temperatureThreshold}°C.\n" .
+                   'Please check the device immediately!';
+
+        $result = sendTelegramRequestAsync('sendMessage', [
+            'chat_id' => CHAT_ID,
+            'text' => $message,
+            'parse_mode' => 'HTML',
+        ]);
+
+        logMessage("High battery temperature detected: {$battery['temperature']}°C");
+
+        return $result;
+    }
+
+    return true;
+}
+```
+
+3. Call this function within the `while` loop that handles updates and notifications:
+
+```php
+while (true) {
+    // Existing code...
+
+    $battery = getBatteryStatus();
+    if (null !== $battery) {
+        handleHighTemperature($battery);
+        // Other code...
+    }
+
+    // Existing code...
 }
 ```
 
