@@ -135,7 +135,7 @@ To add custom actions based on battery temperature:
 /**
  * Monitor battery temperature and send alert if it exceeds a threshold.
  *
- * @param array $battery Battery information
+ * @param  array  $battery  Battery information
  * @return bool Success status
  */
 function handleHighTemperature(array $battery) : bool
