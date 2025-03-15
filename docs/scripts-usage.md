@@ -28,8 +28,6 @@ The script manages the following services:
 - **sshd**: SSH server for remote access
 - **battery.php**: Battery monitoring script
 
-Ось як можна покращити розділ "Examples" у документації:
-
 ### Examples
 
 **Starting all server processes:**
