@@ -1,3 +1,6 @@
+> [!NOTE]
+> This repository contains modified versions of open-source software. The modifications are made to enhance compatibility with older Android devices. All original licenses and attributions are preserved.
+
 # j3-server-setup
 
 A specialized setup for running server applications on Android devices using a modified TermOnePlus environment. This repository is particularly useful for older Android devices (Android 5-6) that only support termux-21.
@@ -71,10 +74,6 @@ A PHP script for monitoring battery status and performing related operations.
 ## License
 
 This project is licensed under the CSSM Unlimited License v2 (CSSM-ULv2). See the [LICENSE](LICENSE) file for details.
-
-## Disclaimer
-
-This repository contains modified versions of open-source software. The modifications are made to enhance compatibility with older Android devices. All original licenses and attributions are preserved.
 
 ## Contributing
 
