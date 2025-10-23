@@ -25,26 +25,26 @@ This repository provides a complete setup for establishing a functional server e
 
 ```
 j3-server-setup/
-├── apk/
-│   ├── termoneplus-custom.apk
-│   └── termoneplus-font-dejavu-nerd.apk
-├── prebuilt/
-│   ├── bin/
-│   │   ├── ngrok
-│   │   └── cloudflared
-│   └── debs/
-│       ├── essential-packages.zip
-│       └── additional-packages.zip
-├── scripts/
-│   ├── server.sh
-│   └── battery.php
-├── setup/
-│   ├── termux-bootstrap.zip
-│   └── config-files.zip
-└── docs/
-    ├── installation.md
-    ├── troubleshooting.md
-    └── scripts-usage.md
++-- apk/
+|   +-- termoneplus-custom.apk
+|   \-- termoneplus-font-dejavu-nerd.apk
++-- prebuilt/
+|   +-- bin/
+|   |   +-- ngrok
+|   |   \-- cloudflared
+|   \-- debs/
+|       +-- essential-packages.zip
+|       \-- additional-packages.zip
++-- scripts/
+|   +-- server.sh
+|   \-- battery.php
++-- setup/
+|   +-- termux-bootstrap.zip
+|   \-- config-files.zip
+\-- docs/
+    +-- installation.md
+    +-- troubleshooting.md
+    \-- scripts-usage.md
 ```
 
 ## Quick Start
