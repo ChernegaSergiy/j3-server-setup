@@ -89,7 +89,11 @@ proot \
 
             # Update and Install
             apk update && \
-            apk add --no-cache php84 php84-cli php84-mbstring php84-openssl php84-phar php84-curl php84-dom php84-xmlwriter php84-tokenizer || exit 1
+            apk add --no-cache \
+                php84 php84-cli php84-phar \
+                php84-mbstring php84-openssl php84-curl \
+                php84-tokenizer php84-dom php84-xmlwriter \
+                php84-sqlite3 php84-pdo_sqlite || exit 1
         fi
 
         # 4. Execute Command
@@ -129,9 +133,12 @@ Copyright (c) The PHP Group
 
 ## Usage
 
+**Important:** Your Termux home directory (`~`) is mapped to `/root/home` inside the Alpine environment.
+
 - **Run a PHP script:**
+  You must specify the `home/` prefix because the default working directory inside Alpine is `/root`.
   ```sh
-  php84 bot.php
+  php84 home/bot.php
   ```
 
 - **Enter the Alpine Shell (to install more packages):**
@@ -143,4 +150,6 @@ Copyright (c) The PHP Group
   ```
 
 - **Managing Files:**
-  Your Termux home folder (`~`) is mapped to `/root/home` inside the PHP environment. You can edit files in Termux and run them instantly with `php84`.
+  You can edit files in Termux as usual. When running them via `php84`, just remember they are located in the `home/` folder inside the virtual environment.
+  
+  *Example:* `~/project/script.php` in Termux → `home/project/script.php` in php84.
