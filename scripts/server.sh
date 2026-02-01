@@ -18,6 +18,7 @@ set -e
 
 # Declare associative arrays for configuration
 declare -A CONF_PROCESS
+declare -A CONF_PIDFILE
 declare -A CONF_START
 declare -A CONF_STOP
 declare -A CONF_CHECK
@@ -106,62 +107,59 @@ start_service() {
 # Function to stop a service
 stop_service() {
     local service="$1"
-    local process_name="${CONF_PROCESS[$service]}"
     local stop_cmd="${CONF_STOP[$service]}"
-    local check_cmd="${CONF_CHECK[$service]}"
+    local process_name="${CONF_PROCESS[$service]}"
+    local pidfile="${CONF_PIDFILE[$service]}"
     local skip_on_normal="${CONF_SKIP_STOP[$service]}"
-    
-    # Check if service should be skipped during normal stop
+
     if [ "$skip_on_normal" = "true" ] && [ "$FORCE_MODE" != true ]; then
-        echo "[ INFO ] $service is not being stopped (use --force to stop it)."
-        return
+        echo "[ INFO ] $service skipped (requires --force)"
+        return 0
     fi
-    
-    # Check if service is running
-    if [ -n "$check_cmd" ]; then
-        if ! eval "$check_cmd" >/dev/null 2>&1; then
-            echo "[ SKIP ] $service is not running."
-            return
-        fi
-    elif [ -n "$process_name" ]; then
-        if ! pgrep -x "$process_name" >/dev/null && ! pgrep -f "$process_name" >/dev/null; then
-            echo "[ SKIP ] $service is not running."
-            return
-        fi
-    fi
-    
+
     echo "[  ..  ] Stopping: $service"
-    
-    # Use custom stop command if provided
+
     if [ -n "$stop_cmd" ]; then
-        eval "$stop_cmd" >/dev/null 2>&1
-    elif [ -n "$process_name" ]; then
-        pkill -TERM -x "$process_name" || pkill -TERM -f "$process_name"
-    fi
-    
-    # Wait for service to stop
-    for i in 1 2 3 4 5; do
-        sleep 1
-        if [ -n "$check_cmd" ]; then
-            if ! eval "$check_cmd" >/dev/null 2>&1; then
-                echo "[  OK  ] $service stopped successfully."
-                return
-            fi
-        elif [ -n "$process_name" ]; then
-            if ! pgrep -x "$process_name" >/dev/null && ! pgrep -f "$process_name" >/dev/null; then
-                echo "[  OK  ] $service stopped successfully."
-                return
-            fi
+        if eval "$stop_cmd" >/dev/null 2>&1; then
+            echo "[  OK  ] $service stopped."
+            return 0
         fi
-    done
-    
-    # Force kill if requested
-    if [ "$FORCE_MODE" = true ] && [ -n "$process_name" ]; then
-        echo "[ WARN ] $service did not terminate, forcing kill."
-        pkill -9 -x "$process_name" || pkill -9 -f "$process_name"
-    else
-        echo "[ FAIL ] $service did not terminate. Use '--force' to kill it."
     fi
+
+    if [ -n "$pidfile" ] && [ -r "$pidfile" ]; then
+        local pid
+        pid="$(cat "$pidfile")"
+
+        if kill -TERM "$pid" 2>/dev/null; then
+            echo "[  OK  ] $service SIGTERM sent (PID $pid)."
+            return 0
+        fi
+    fi
+
+    if [ -n "$process_name" ]; then
+        if pkill -TERM --exact "$process_name"; then
+            echo "[  OK  ] $service stopped."
+            return 0
+        fi
+    fi
+
+    if [ "$FORCE_MODE" = true ]; then
+        echo "[ WARN ] Forcing termination of $service."
+
+        if [ -n "$pidfile" ] && [ -r "$pidfile" ]; then
+            kill -KILL "$(cat "$pidfile")" 2>/dev/null && return 0
+        fi
+
+        if [ -n "$process_name" ]; then
+            pkill -KILL --exact "$process_name" && return 0
+        fi
+
+        echo "[ FAIL ] Force kill failed for $service."
+        return 1
+    fi
+
+    echo "[ FAIL ] $service did not stop (use --force to override)."
+    return 1
 }
 
 # Function to check service status
