@@ -6,13 +6,13 @@
 # It uses Bash associative arrays for configuration.
 #
 # Properties:
-#   CONF_PROCESS[service]   - Process name for exact match (pkill/pgrep -x)
-#   CONF_PIDFILE[service]   - Path to pidfile (authoritative, optional)
-#   CONF_START[service]     - Command to start the service (required)
-#   CONF_STOP[service]      - Custom stop command (optional)
-#   CONF_CHECK[service]     - Custom check command (optional)
-#   CONF_REQUIRED[service]  - Command to verify before starting (optional)
-#   CONF_SKIP_STOP[service] - Skip during normal stop (optional, "true"/"false")
+#   CONF_PROCESS[service]    - Process name for exact match (pkill/pgrep -x)
+#   CONF_PIDFILE[service]    - Path to pidfile (authoritative, optional)
+#   CONF_START[service]      - Command to start the service (required)
+#   CONF_STOP[service]       - Custom stop command (optional)
+#   CONF_CHECK[service]      - Custom check command (optional)
+#   CONF_REQUIRED[service]   - Command to verify before starting (optional)
+#   CONF_SKIP_STOP[service]  - Skip during normal stop (optional, "true"/"false")
 #
 
 # List of services to manage (defines execution order)
