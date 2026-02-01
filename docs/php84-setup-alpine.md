@@ -129,6 +129,114 @@ Copyright (c) The PHP Group
 ...
 ```
 
+## 6. PHP-FPM Configuration and User Setup
+
+PHP-FPM (FastCGI Process Manager) requires proper user/group configuration to run. By default, PHP-FPM refuses to run as root for security reasons.
+
+### Install PHP-FPM
+
+Inside the Alpine environment, install PHP-FPM:
+
+```sh
+php84
+apk add php84-fpm
+```
+
+### Create a Dedicated User
+
+PHP-FPM needs a non-root user. Create the `www-data` user and group:
+
+```sh
+# Inside Alpine shell:
+delgroup www-data 2>/dev/null || true
+adduser -D -H -s /sbin/nologin www-data
+```
+
+Verify the user was created:
+
+```sh
+id www-data
+```
+
+Expected output:
+
+```
+uid=100(www-data) gid=101(www-data) groups=101(www-data)
+```
+
+### Configure PHP-FPM Pool
+
+Edit the PHP-FPM pool configuration using `sed`:
+
+```sh
+sed -i 's/^;*user = .*/user = www-data/' /etc/php84/php-fpm.d/www.conf
+sed -i 's/^;*group = .*/group = www-data/' /etc/php84/php-fpm.d/www.conf
+sed -i 's/^;*listen = .*/listen = 127.0.0.1:9000/' /etc/php84/php-fpm.d/www.conf
+```
+
+Verify the configuration:
+
+```sh
+cat /etc/php84/php-fpm.d/www.conf | grep -E "^user|^group|^listen"
+```
+
+Expected output:
+
+```
+user = www-data
+group = www-data
+listen = 127.0.0.1:9000
+```
+
+### Set File Permissions
+
+Grant the `www-data` user access to your web files:
+
+```sh
+# Assuming your web root is /root/home/www
+chown -R www-data:www-data /root/home/www
+find /root/home/www -type d -exec chmod 755 {} \;
+find /root/home/www -type f -exec chmod 644 {} \;
+```
+
+### Start PHP-FPM
+
+Start the PHP-FPM service:
+
+```sh
+php-fpm84 -D
+```
+
+Verify it's running:
+
+```sh
+ps aux | grep php-fpm
+netstat -tlnp | grep 9000
+```
+
+### Alternative: Running as Root
+
+If you encounter issues with the `www-data` user, you can run PHP-FPM as root (not recommended for production):
+
+```sh
+# Update config to use root
+sed -i 's/^user = www-data/user = root/' /etc/php84/php-fpm.d/www.conf
+sed -i 's/^group = www-data/group = root/' /etc/php84/php-fpm.d/www.conf
+
+# Start with root flag
+php-fpm84 -R -D
+```
+
+### Auto-start PHP-FPM
+
+To automatically start PHP-FPM, add it to your Alpine profile:
+
+```sh
+echo 'pgrep -x php-fpm84 > /dev/null || php-fpm84 -D 2>/dev/null' >> /root/.profile
+```
+
+This will start PHP-FPM each time you enter the Alpine shell with `php84`.
+
 ---
 
 ## Usage
