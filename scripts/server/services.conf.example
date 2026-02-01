@@ -28,6 +28,7 @@ SERVICE_ORDER=(
 # NGINX Configuration
 # ============================================================================
 CONF_PROCESS["nginx"]="nginx"
+CONF_PIDFILE["nginx"]="$PREFIX/var/run/nginx.pid"
 CONF_START["nginx"]="nginx"
 CONF_REQUIRED["nginx"]="nginx"
 
