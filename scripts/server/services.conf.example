@@ -36,6 +36,7 @@ CONF_REQUIRED["nginx"]="nginx"
 # PHP-FPM Configuration
 # ============================================================================
 CONF_PROCESS["php-fpm"]="php-fpm"
+CONF_PIDFILE["php-fpm"]="$PREFIX/var/run/php-fpm.pid"
 CONF_START["php-fpm"]="php-fpm"
 CONF_REQUIRED["php-fpm"]="php-fpm"
 
