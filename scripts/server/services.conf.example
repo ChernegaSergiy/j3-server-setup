@@ -3,51 +3,58 @@
 # ============================================================================
 #
 # This file defines which services to manage and how to control them.
+# It uses Bash associative arrays for configuration.
 #
-# Each service can have the following properties:
-#   - <service>_process: Process name for pgrep (required)
-#   - <service>_start_command: Command to start the service (required)
-#   - <service>_stop_command: Custom stop command (optional)
-#   - <service>_check_command: Custom check command (optional)
-#   - <service>_required_command: Command to verify before starting (optional)
-#   - <service>_skip_on_normal_stop: Skip during normal stop (optional)
+# Properties:
+#   CONF_PROCESS[service]   - Process name for pgrep (required)
+#   CONF_START[service]     - Command to start the service (required)
+#   CONF_STOP[service]      - Custom stop command (optional)
+#   CONF_CHECK[service]     - Custom check command (optional)
+#   CONF_REQUIRED[service]  - Command to verify before starting (optional)
+#   CONF_SKIP_STOP[service] - Skip during normal stop (optional, "true"/"false")
 #
 
-# List of services to manage (space-separated)
-SERVICES="nginx php-fpm cloudflared battery sshd"
+# List of services to manage (defines execution order)
+SERVICE_ORDER=(
+    "nginx"
+    "php-fpm"
+    "cloudflared"
+    "battery"
+    "sshd"
+)
 
 # ============================================================================
 # NGINX Configuration
 # ============================================================================
-nginx_process="nginx"
-nginx_start_command="nginx"
-nginx_required_command="nginx"
+CONF_PROCESS["nginx"]="nginx"
+CONF_START["nginx"]="nginx"
+CONF_REQUIRED["nginx"]="nginx"
 
 # ============================================================================
 # PHP-FPM Configuration
 # ============================================================================
-php_fpm_process="php-fpm"
-php_fpm_start_command="php-fpm"
-php_fpm_required_command="php-fpm"
+CONF_PROCESS["php-fpm"]="php-fpm"
+CONF_START["php-fpm"]="php-fpm"
+CONF_REQUIRED["php-fpm"]="php-fpm"
 
 # ============================================================================
 # Cloudflared Configuration
 # ============================================================================
-cloudflared_process="cloudflared"
-cloudflared_start_command="termux-chroot cloudflared tunnel run my-tunnel"
-cloudflared_required_command="cloudflared"
+CONF_PROCESS["cloudflared"]="cloudflared"
+CONF_START["cloudflared"]="termux-chroot cloudflared tunnel run my-tunnel"
+CONF_REQUIRED["cloudflared"]="cloudflared"
 
 # ============================================================================
 # Battery Monitor Configuration
 # ============================================================================
-battery_process="php /data/data/com.termux/files/home/battery.php"
-battery_start_command="nohup php /data/data/com.termux/files/home/battery.php"
-battery_required_command="php"
+CONF_PROCESS["battery"]="php /data/data/com.termux/files/home/battery.php"
+CONF_START["battery"]="nohup php /data/data/com.termux/files/home/battery.php"
+CONF_REQUIRED["battery"]="php"
 
 # ============================================================================
 # SSHD Configuration
 # ============================================================================
-sshd_process="sshd"
-sshd_start_command="sshd"
-sshd_required_command="sshd"
-sshd_skip_on_normal_stop="true"
+CONF_PROCESS["sshd"]="sshd"
+CONF_START["sshd"]="sshd"
+CONF_REQUIRED["sshd"]="sshd"
+CONF_SKIP_STOP["sshd"]="true"
