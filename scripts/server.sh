@@ -91,13 +91,13 @@ start_service() {
   if [[ -n "${check_cmd}" ]]; then
     if eval "${check_cmd}" >/dev/null 2>&1; then
       echo "[  OK  ] ${service} is already running."
-      return 1
+      return 0
     fi
   elif [[ -n "${process_name}" ]]; then
     if pgrep -x "${process_name}" >/dev/null || \
        pgrep -f "${process_name}" >/dev/null; then
       echo "[  OK  ] ${service} is already running."
-      return 1
+      return 0
     fi
   fi
   
