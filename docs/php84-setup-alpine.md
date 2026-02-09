@@ -100,7 +100,7 @@ proot \
         if [ \"\$1\" ]; then
             exec php84 \"\$@\"
         else
-            exec /bin/sh
+            exec /bin/sh -l
         fi
     " -- "$@"
 EOF
