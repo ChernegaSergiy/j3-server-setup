@@ -56,4 +56,5 @@ CONF_REQUIRED["battery"]="php"
 #######################################
 CONF_PROCESS["sshd"]="sshd"
 CONF_PIDFILE["sshd"]="${PREFIX}/var/run/sshd.pid"
+CONF_START["sshd"]="sshd"
 CONF_SKIP_STOP["sshd"]="true"
